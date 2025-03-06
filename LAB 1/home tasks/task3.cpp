@@ -7,7 +7,7 @@ Use * symbols to represent AQI levels, where each * represents an AQI increment 
 */
 
 #include <iostream>
-#include <iomanip>
+#include <string>
 using namespace std;
 
 int main()
@@ -21,20 +21,31 @@ int main()
         {20, 30, 40, 50, 60, 70, 80}};
     string cities[CITIES] = {"City A", "City B", "City C", "City D"};
 
-    cout << setw(15) << left << "City";
+    cout << "City       ";
     for (int j = 0; j < DAYS; j++)
     {
-        cout << setw(10) << "Day " << j + 1;
+        cout << "Day " << j + 1 << "  ";
     }
     cout << endl;
 
     for (int i = 0; i < CITIES; i++)
     {
-        cout << setw(15) << left << cities[i];
+        cout << cities[i];
+
+        for (size_t s = cities[i].length(); s < 10; s++)
+        {
+            cout << " ";
+        }
+
         for (int j = 0; j < DAYS; j++)
         {
             int stars = aqi[i][j] / 50;
-            cout << setw(10) << string(stars, '*');
+            cout << string(stars, '*');
+
+            for (size_t s = stars; s < 8; s++)
+            {
+                cout << " ";
+            }
         }
         cout << endl;
     }
