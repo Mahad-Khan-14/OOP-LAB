@@ -1,0 +1,83 @@
+#include "iostream"
+#include "fstream"
+#include "string"
+#include "sstream"
+using namespace std;
+
+class cardealer
+{
+private:
+    string filename;
+
+public:
+    cardealer(const string &name) : filename(name) {}
+
+    void readdata()
+    {
+        ifstream in(filename);
+        string line;
+        cout << "Reading file " << filename << endl;
+        if (in.is_open())
+        {
+            while (getline(in, line))
+            {
+                if (line.empty() || line.substr(0, 2) == "//")
+                {
+                    continue;
+                }
+
+                cout << "Original Line: " << line << endl;
+
+                istringstream str(line);
+
+                string type, id, name, stryear, extra, cert;
+                getline(str, type, ',');
+                getline(str, id, ',');
+                getline(str, name, ',');
+                getline(str, stryear, ',');
+                getline(str, extra, ',');
+                getline(str, cert, ',');
+
+                int year = stoi(stryear);
+
+                cout << "Type: " << type << endl;
+                cout << "ID: " << id << endl;
+                cout << "Name: " << name << endl;
+                cout << "Year: " << year << endl;
+                cout << "Extra Data: " << extra << endl;
+                cout << "Certification: " << cert << endl;
+                // cout << "-----------------------------\n";
+
+                size_t colonpos = extra.find(':');
+                if (colonpos != string::npos)
+                {
+                    string valuestr = extra.substr(colonpos + 1);
+
+                    if (type == "AutonomousCar")
+                    {
+                        float softwareversion = stof(valuestr);
+                        cout << "Software Version (float) for ID " << id << ": " << softwareversion << endl;
+                    }
+                    else if (type == "ElectricVehicle")
+                    {
+                        int batteryCapacity = stoi(valuestr);
+                        cout << "Battery Capacity (int) for ID " << id << ": " << batteryCapacity << " mAh" << endl;
+                    }
+                }
+                cout << "----------------------------------------------" << endl;
+            }
+            in.close();
+        }
+        else
+        {
+            cout << "File could not be able to open for reading" << endl;
+        }
+    }
+};
+
+int main()
+{
+    cardealer vehicle("vehicle.txt");
+    vehicle.readdata();
+    return 0;
+}
